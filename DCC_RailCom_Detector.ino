@@ -13,6 +13,8 @@
 #include "Detector.h"
 #include "Pom.h"
 
+int loopCount;
+
 //================================= Setup =======================================
 
 void setup()
@@ -40,8 +42,12 @@ void setup()
 
 void loop()
 {
-  dccIdlePackets(1);
- 
-  readLocAddress();
-  Serial.println("");
+  dccIdlePackets(15);
+  
+  if (loopCount < 50)
+  {
+    readLocAddress();
+    Serial.println("");
+    loopCount++;
+  }
 }
