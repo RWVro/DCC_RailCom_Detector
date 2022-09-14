@@ -128,7 +128,7 @@ void sendLocErrorDetection()
 
 void LocCutOutPulse()
 {
-  attachInterrupt((railComInt), GPIO15ToHigh, FALLING);
+  attachInterrupt((railComInt), GPIO15ToLow, FALLING);
 
   digitalWrite(LPWM, LOW);          // LPWM LOW
   digitalWrite(RPWM, HIGH);         // RPWM HIGH
