@@ -123,6 +123,16 @@ void printRxArrayToBin()
   }
 }
 
+void ClearRxArray()
+{
+  int i = 0;
+  while (i < rxArrayMax - 1)
+  {
+    rxArray[i] = 0;
+    i ++;
+  }
+}
+
 //===================================== ISR GPIO15 ==============================
 
 void IRAM_ATTR GPIO15ToHigh()
@@ -145,8 +155,8 @@ void IRAM_ATTR GPIO15ToHigh()
 
       if (test_4_8Code)                             // Check if 4-8 code is ok, if ok , print
       {
-        Serial.print(inByte);                       // Print 4-8 code
-        Serial.print(" ");
+        //Serial.print(inByte);                       // Print 4-8 code
+        //Serial.print(" ");
       }
 
       convert4_8ToDec();
@@ -161,10 +171,11 @@ next :;
     }
   }
   arrayComplete = true;
-  if (rxArrayCnt > 0)                               // Print only when char's received
+  if (rxArrayCnt > 1)                               // Print only when char's received
   {
-    Serial.println("");
+    //Serial.println("");
     printRxArray();
     printRxArrayToBin();
   }
+  ClearRxArray();
 }
