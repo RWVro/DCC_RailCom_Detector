@@ -1,8 +1,8 @@
 //
 
-byte LocaddByte = 0;
-byte LocInstrByte = 0;
-byte LocCVNmbByte = 0;
+byte LocAddressByte = 0;
+byte LocInstructionByte = 0;
+byte LocCVAddressByte = 0;
 byte LocCVValueByte = 0;
 byte LocErrorByte = 0;
 
@@ -91,14 +91,14 @@ void sendLocAddress()
 {
   for (int k = 7; k >= 0; k--)
   {
-    dccBitsToPulses(bitRead(LocaddByte, k));
+    dccBitsToPulses(bitRead(LocAddressByte, k));
   }
 }
 void sendLocInstruction()
 {
   for (int k = 7; k >= 0; k--)
   {
-    dccBitsToPulses(bitRead(LocInstrByte, k));
+    dccBitsToPulses(bitRead(LocInstructionByte, k));
   }
 }
 
@@ -106,7 +106,7 @@ void sendLocCVNumber()
 {
   for (int k = 7; k >= 0; k--)
   {
-    dccBitsToPulses(bitRead(LocCVNmbByte, k));
+    dccBitsToPulses(bitRead(LocCVAddressByte, k));
   }
 }
 
@@ -128,7 +128,7 @@ void sendLocErrorDetection()
 
 void LocCutOutPulse()
 {
-  attachInterrupt((railComInt), GPIO15ToHigh, RISING);
+  attachInterrupt((railComInt), GPIO15ToHigh, FALLING);
 
   digitalWrite(LPWM, LOW);          // LPWM LOW
   digitalWrite(RPWM, HIGH);         // RPWM HIGH
