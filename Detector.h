@@ -124,7 +124,7 @@ void ClearRxArray()
 
 //===================================== ISR GPIO15 ==============================
 
-void IRAM_ATTR GPIO15ToHigh()
+void IRAM_ATTR GPIO15ToLow()
 {
   rxArrayCnt = 0;
 
