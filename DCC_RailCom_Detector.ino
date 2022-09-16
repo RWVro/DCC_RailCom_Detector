@@ -33,7 +33,8 @@ void setup()
 
   delay(3000);
   Serial.println("Program Started!");
-
+  Serial.println("");
+  
   Poort2.begin(250000, SERIAL_8N1, railComRX, 17);    // Define and start ESP32 serial port
   delay(3000);
 }
@@ -42,12 +43,12 @@ void setup()
 
 void loop()
 {
-  dccIdlePackets(15);
+  basicNormalPulses(10);
   
   if (loopCount < 50)
   {
+    dccIdlePackets(5);
     readLocAddress();
-    Serial.println("");
     loopCount++;
   }
 }
