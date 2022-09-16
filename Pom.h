@@ -1,10 +1,10 @@
 //
 
-byte LocAddressByte = 0;
-byte LocInstructionByte = 0;
-byte LocCVAddressByte = 0;
-byte LocCVValueByte = 0;
-byte LocErrorByte = 0;
+byte LocAddressByte = 0;              // Loc address
+byte LocInstructionByte = 0;          // Instruction
+byte LocCVAddressByte = 0;            // CV Address = CV Number from NMRA list minus 1
+byte LocCVValueByte = 0;              // When reading instruction this remains 0
+byte LocErrorByte = 0;                // Error byte
 
 //===================================== functions to create pulses =========================================
 
@@ -32,6 +32,23 @@ void dccZeroPulse()                 // Zero pulse on CH A (Main Track)
   digitalWrite(RPWM, LOW);          // RPWM LOW
   digitalWrite(LPWM, HIGH);         // LPWM HIGH
   delayMicroseconds(100);
+}
+
+void basicNormalPulses(int value)
+{
+  for (byte x = 0; x < value; x++)
+  {
+    dccZeroPulse();
+    dccOnePulse();
+    dccZeroPulse();
+    dccOnePulse();
+    dccZeroPulse();
+    dccOnePulse();
+    dccZeroPulse();
+    dccOnePulse();
+    dccZeroPulse();
+    dccOnePulse();
+  }
 }
 
 //===================================== Convert Binary Digits to Pulses ================
@@ -128,7 +145,7 @@ void sendLocErrorDetection()
 
 void LocCutOutPulse()
 {
-  attachInterrupt((railComInt), GPIO15ToLow, FALLING);
+  attachInterrupt((railComInt), GPIO15ToHigh, FALLING);
 
   digitalWrite(LPWM, LOW);          // LPWM LOW
   digitalWrite(RPWM, HIGH);         // RPWM HIGH
