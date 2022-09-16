@@ -15,16 +15,12 @@ const int rxArrayMax = 11;
 int rxArray[rxArrayMax];      
 int rxArrayCnt = 0;
 
-int addrValue;
-int speedValue;
-
 bool ok_4_8Code = true;
 bool no_4_8Code = false;
 
 bool test_4_8Code = true;
 bool test_4_8Decimal = true;
 
-int safeCharRxCnt = 0;        // Safe received char counter
 int convByte;
 
 //==================================== Conversion Arrays =============================
@@ -83,12 +79,8 @@ out:;
 
 void printRxArray()
 {
-  if (safeCharRxCnt == 0)
-  {
-    return;
-  }
   int i = 0;
-  while (i <= safeCharRxCnt)
+  while (i <= rxArrayCnt)
   {
     Serial.print(rxArray[i]);
     Serial.print(" ");
@@ -110,17 +102,14 @@ void setIntToBinString()
 
 void printRxArrayToBin()
 {
-  if (safeCharRxCnt == 0)
-  {
-    return;
-  }
   int i = 0;
-  while (i <= safeCharRxCnt)
+  while (i <= rxArrayCnt)
   {
     convByte = (rxArray[i]);
     setIntToBinString();
     i ++;
   }
+  Serial.println("");  
 }
 
 void ClearRxArray()
@@ -135,10 +124,9 @@ void ClearRxArray()
 
 //===================================== ISR GPIO15 ==============================
 
-void IRAM_ATTR GPIO15ToLow()
+void IRAM_ATTR GPIO15ToHigh()
 {
   rxArrayCnt = 0;
-  safeCharRxCnt = 0;
 
   while (Poort2.available())
   {
@@ -155,7 +143,7 @@ void IRAM_ATTR GPIO15ToLow()
 
       if (test_4_8Code)                             // Check if 4-8 code is ok, if ok , print
       {
-        //Serial.print(inByte);                       // Print 4-8 code
+        //Serial.print(inByte);                     // Print 4-8 code
         //Serial.print(" ");
       }
 
@@ -166,14 +154,11 @@ void IRAM_ATTR GPIO15ToLow()
         rxArray[rxArrayCnt] = inByte;               // Byte into  array
         rxArrayCnt ++;                              // Increment char counter
       }
-      safeCharRxCnt = rxArrayCnt - 1;               // Safe char counter
 next :;
     }
   }
-  arrayComplete = true;
-  if (rxArrayCnt > 1)                               // Print only when char's received
+  if (rxArrayCnt > 1)                               // Print only only more than 1 char's received
   {
-    //Serial.println("");
     printRxArray();
     printRxArrayToBin();
   }
