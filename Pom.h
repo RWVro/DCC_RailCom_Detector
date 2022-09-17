@@ -40,14 +40,6 @@ void basicNormalPulses(int value)
   {
     dccZeroPulse();
     dccOnePulse();
-    dccZeroPulse();
-    dccOnePulse();
-    dccZeroPulse();
-    dccOnePulse();
-    dccZeroPulse();
-    dccOnePulse();
-    dccZeroPulse();
-    dccOnePulse();
   }
 }
 
@@ -163,7 +155,7 @@ void LocCutOutPulse()
 
 //================================== Send Loc Read Packet ====================
 
-void readLocAddress()
+void readLocValues()
 {
   sendDCCPreamble();
   dccZeroPulse();           // start bit
