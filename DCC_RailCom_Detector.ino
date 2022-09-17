@@ -14,7 +14,6 @@
 #include "Pom.h"
 
 int loopCount;
-
 //================================= Setup =======================================
 
 void setup()
@@ -34,21 +33,28 @@ void setup()
   delay(3000);
   Serial.println("Program Started!");
   Serial.println("");
-  
+
   Poort2.begin(250000, SERIAL_8N1, railComRX, 17);    // Define and start ESP32 serial port
   delay(3000);
 }
 
 //======================================= Main Program ==============================
+//
+// Do not use delay() commands in the loop program.
+// Otherwise there is a chance that the locomotive will quickly run off the rails.
+// DCC signal then stops temporarily.
 
 void loop()
 {
-  basicNormalPulses(10);
+  basicNormalPulses(10);          // Create DCC signal
   
   if (loopCount < 50)
   {
-    dccIdlePackets(5);
-    readLocAddress();
+    dccIdlePackets(1);
+    readLocValues();
+    dccIdlePackets(1);
+    readLocValues();
+    dccIdlePackets(1);
     loopCount++;
   }
 }
