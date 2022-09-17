@@ -12,7 +12,7 @@ bool arrayComplete = false;
 int inByte = 0;
 
 const int rxArrayMax = 11;
-int rxArray[rxArrayMax];      
+int rxArray[rxArrayMax];
 int rxArrayCnt = 0;
 
 bool ok_4_8Code = true;
@@ -109,7 +109,7 @@ void printRxArrayToBin()
     setIntToBinString();
     i ++;
   }
-  Serial.println("");  
+  Serial.println("");
 }
 
 void ClearRxArray()
@@ -157,10 +157,13 @@ void IRAM_ATTR GPIO15ToLow()
 next :;
     }
   }
-  if (rxArrayCnt > 1)                               // Print only only more than 1 char's received
+
+  if (rxArrayCnt <= 1)                              // Save only arrays with 2 or more bytes
   {
-    printRxArray();
-    printRxArrayToBin();
+    ClearRxArray();
+    return;
   }
+  printRxArray();
+  printRxArrayToBin();
   ClearRxArray();
 }
