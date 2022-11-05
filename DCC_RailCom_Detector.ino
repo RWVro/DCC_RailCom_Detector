@@ -1,4 +1,11 @@
-
+//
+//          I have noticed that locomotives from some manufacturers
+//          do not answer if you request the address with address 0.
+//          The solution is as follows:
+//
+//          Increase the address by 1 and test again, stop when the address is found
+//
+//
 //====================================== DCC RailCom Detector Program ================================
 //
 //
@@ -14,6 +21,9 @@
 #include "Pom.h"
 
 int loopCount;
+
+String outputStr;
+
 //================================= Setup =======================================
 
 void setup()
@@ -46,15 +56,24 @@ void setup()
 
 void loop()
 {
-  basicNormalPulses(10);          // Create DCC signal
+  basicNormalPulses(50);                // Create DCC signal
   
   if (loopCount < 50)
   {
-    dccIdlePackets(1);
     readLocValues();
     dccIdlePackets(1);
     readLocValues();
     dccIdlePackets(1);
+    
+    if (!addressOK)                   // Increase the address if the locomotive does not respond to address 0
+    {
+      LocAddressByte++;
+    }
+    if (addressOK)                    // Print when the address is found
+    {
+      outputStr = "Loc Address=" + String(foundAddressByte); 
+      Serial.println(outputStr);      
+    }
     loopCount++;
   }
 }
