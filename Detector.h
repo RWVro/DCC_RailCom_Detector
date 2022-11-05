@@ -23,6 +23,9 @@ bool test_4_8Decimal = true;
 
 int convByte;
 
+byte foundAddressByte;
+bool addressOK = false;
+
 //==================================== Conversion Arrays =============================
 
 int decodeArray[68] = {172, 170, 169, 165, 163, 166, 156, 154, 153, 149, 147, 150, 142, 141, 139, 177, 178, 180, 184, 116,
@@ -158,11 +161,18 @@ next :;
     }
   }
 
-  if (rxArrayCnt <= 1)                              // Save only arrays with 2 or more bytes
+  if (rxArrayCnt <= 1)                              //  clear arrays with less than 3 bytes
   {
     ClearRxArray();
     return;
   }
+  
+  if (rxArray[0] == 8)                              // Test is array starts with 8 (address line)
+  {
+    foundAddressByte = rxArray[1];                  // Save the loc address
+    addressOK = true;
+  }
+  
   printRxArray();
   printRxArrayToBin();
   ClearRxArray();
