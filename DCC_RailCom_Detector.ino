@@ -5,6 +5,7 @@
 //
 //          Increase the address by 1 and test again, stop when the address is found
 //
+//          Tested with Fleischmann locomotives and MiniTrix locomotives.
 //
 //====================================== DCC RailCom Detector Program ================================
 //
@@ -20,9 +21,9 @@
 #include "Detector.h"
 #include "Pom.h"
 
-int loopCount;
+int loopCount = 0;
 
-String outputStr;
+//String outputStr;
 
 //================================= Setup =======================================
 
@@ -56,24 +57,29 @@ void setup()
 
 void loop()
 {
-  basicNormalPulses(50);                // Create DCC signal
-  
-  if (loopCount < 50)
+  // Start testing with LocAddressByte = 0 
+
+  basicNormalPulses(50);                                        // Create DCC signal
+
+  while (loopCount < 20)
   {
+    basicNormalPulses(10);                                      // Create DCC signal
+
     readLocValues();
     dccIdlePackets(1);
     readLocValues();
     dccIdlePackets(1);
-    
-    if (!addressOK)                   // Increase the address if the locomotive does not respond to address 0
-    {
-      LocAddressByte++;
-    }
-    if (addressOK)                    // Print when the address is found
-    {
-      outputStr = "Loc Address=" + String(foundAddressByte); 
-      Serial.println(outputStr);      
-    }
+
     loopCount++;
+  }
+
+  if (!addressOK)                                             // Increase the address if the locomotive does not respond to address 0
+  {
+    LocAddressByte++;
+    String tempStr;
+    tempStr = "New Test Address=" + String(LocAddressByte);
+    Serial.println(tempStr);
+    loopCount = 0;
+    return;
   }
 }
