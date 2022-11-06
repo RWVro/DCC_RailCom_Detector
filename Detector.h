@@ -13,7 +13,7 @@ int inByte = 0;
 
 const int rxArrayMax = 11;
 int rxArray[rxArrayMax];
-int rxArrayCnt = 0;
+int rxArrayCnt;
 
 bool ok_4_8Code = true;
 bool no_4_8Code = false;
@@ -25,6 +25,8 @@ int convByte;
 
 byte foundAddressByte;
 bool addressOK = false;
+
+String outputStr;
 
 //==================================== Conversion Arrays =============================
 
@@ -144,36 +146,38 @@ void IRAM_ATTR GPIO15ToLow()
 
       check_4_8Code();
 
-      if (test_4_8Code)                             // Check if 4-8 code is ok, if ok , print
+      if (test_4_8Code)                                       // Check if 4-8 code is ok, if ok , print
       {
-        //Serial.print(inByte);                     // Print 4-8 code
+        //Serial.print(inByte);                               // Print 4-8 code
         //Serial.print(" ");
       }
 
       convert4_8ToDec();
 
-      if (test_4_8Decimal)                          // If ok_4_8Code is valid byte into  array
+      if (test_4_8Decimal)                                    // If ok_4_8Code is valid byte into  array
       {
-        rxArray[rxArrayCnt] = inByte;               // Byte into  array
-        rxArrayCnt ++;                              // Increment char counter
+        rxArray[rxArrayCnt] = inByte;                         // Byte into  array
+        rxArrayCnt ++;                                        // Increment char counter
       }
 next :;
     }
   }
 
-  if (rxArrayCnt <= 1)                              //  clear arrays with less than 3 bytes
+  if (rxArrayCnt <= 1)                                        //  remove arrays with 2 or less bytes
   {
     ClearRxArray();
     return;
   }
-  
-  if (rxArray[0] == 8)                              // Test is array starts with 8 (address line)
-  {
-    foundAddressByte = rxArray[1];                  // Save the loc address
-    addressOK = true;
-  }
-  
+
+  Serial.println("");
   printRxArray();
   printRxArrayToBin();
-  ClearRxArray();
+  
+  if (rxArray[0] == 8)                                        // Test is array starts with 8 (address line)
+  {
+    foundAddressByte = rxArray[1];                            // Save the loc address
+    outputStr = "Loc Address=" + String(foundAddressByte); 
+    Serial.println(outputStr);    
+    addressOK = true;
+  }
 }
