@@ -12,3 +12,8 @@ do not answer if you request the address with address 0.
 The solution is as follows:
 
 Increase the address by 1 and test again, stop when the address is found
+
+
+Updated November 6, 2022
+
+Tested with Fleischmann locomotives and MiniTrix locomotives.
